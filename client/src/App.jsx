@@ -3,6 +3,8 @@ import { Routes, Route } from "react-router-dom";
 import routes from "./constants/routes";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import { LogIn } from "lucide-react";
+import Login from "./components/Login";
 
 export default function App() {
   return (
@@ -20,6 +22,7 @@ export default function App() {
         theme="light"
       />
       <Navbar />
+      <Login />
       <Routes>
         {routes.map((route, index) => (
           <Route key={index} path={route.path} element={route.element} />

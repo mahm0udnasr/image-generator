@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { toast } from "react-toastify";
 import { AppContext } from "../context/AppContext";
 import { plans } from "../constants/dummyData";
 import { assets } from "../assets/assets";
@@ -6,7 +7,7 @@ export default function Plans() {
   const { user } = useContext(AppContext);
   const handleBuyButton = (plan) => {
     if (!user) {
-      // any alert with a modern design
+      toast.error("Sorry, Please Login First!");
       return;
     }
     // Handle the logic for buying a plan here
@@ -37,7 +38,7 @@ export default function Plans() {
               onClick={handleBuyButton.bind(null, plan)}
               className="w-full bg-gray-800 text-white mt-8 text-sm rounded-md py-2.5 min-w-52"
             >
-              Get Started
+              Buy Now
             </button>
           </div>
         ))}

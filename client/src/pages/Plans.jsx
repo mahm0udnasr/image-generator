@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import { AppContext } from "../context/AppContext";
+import { motion } from "framer-motion";
 import { plans } from "../constants/dummyData";
 import { assets } from "../assets/assets";
 export default function Plans() {
@@ -14,7 +15,13 @@ export default function Plans() {
     console.log(`Buying plan: ${plan.name}`);
   };
   return (
-    <div className="min-h-[80vh] text-center pt-14 mb-10">
+    <motion.div
+      className="min-h-[80vh] text-center pt-14 mb-10"
+      initial={{ opacity: 0.2, y: 100 }}
+      transition={{ duration: 1 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+    >
       <button className="border border-gray-400 px-10 py-2 rounded-full mb-6">
         Our Plans
       </button>
@@ -43,6 +50,6 @@ export default function Plans() {
           </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -10,7 +10,7 @@ const routes = [
     element: <Plans />,
   },
   {
-    path: "/result",
+    path: "/generate-images",
     element: <Result />,
   },
   {

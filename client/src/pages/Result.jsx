@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { assets } from "../assets/assets";
 import { ImageDown, Loader2 } from "lucide-react";
@@ -30,9 +31,13 @@ export default function Result() {
     }, 2000);
   };
   return (
-    <form
+    <motion.form
       onSubmit={handleGenerate}
       className="flex flex-col min-h-[90vh] w-full items-center justify-center px-4 py-8"
+      initial={{ opacity: 0.2, y: 100 }}
+      transition={{ duration: 1 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
     >
       <div className="w-full max-w-xl mx-auto">
         <div className="relative w-full rounded-lg overflow-hidden shadow-lg bg-white">
@@ -116,6 +121,6 @@ export default function Result() {
           )}
         </div>
       </div>
-    </form>
+    </motion.form>
   );
 }

@@ -1,16 +1,115 @@
-import { User } from "lucide-react";
+import { useContext, useEffect, useState } from "react";
+import { User, Mail, Lock, X } from "lucide-react";
+import { AppContext } from "../context/AppContext";
 export default function Login() {
-  // state for check is login or register data.. like Singup or login
-
+  // stop scrolling when the form is open
+  const { setIsLoggedIn } = useContext(AppContext);
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+  const [mode, setMode] = useState({
+    title: "Sign Up",
+    text: "Welcome back! Please sign in to continue",
+  });
+  const inputs = [
+    {
+      id: 1,
+      type: "text",
+      placeholder: "Full Name",
+      required: true,
+      icon: <User size={20} color="#4040408a" />,
+      hidden: mode.title === "Sign In",
+    },
+    {
+      id: 2,
+      type: "email",
+      placeholder: "Email Address",
+      required: true,
+      icon: <Mail size={20} color="#4040408a" />,
+    },
+    {
+      id: 3,
+      type: "password",
+      placeholder: "Password",
+      required: true,
+      icon: <Lock size={20} color="#4040408a" />,
+    },
+  ];
+  const handleModeChange = () => {
+    if (mode.title === "Sign In") {
+      setMode({
+        title: "Sign Up",
+        text: "Create an account to get started",
+      });
+    } else {
+      setMode({
+        title: "Sign In",
+        text: "Welcome back! Please sign in to continue",
+      });
+    }
+  };
   return (
     <div className="absolute top-0 left-0 right-0  bottom-0 z-10 backdrop-blur-sm bg-black/30 flex justify-center items-center">
-      <form>
-        <h1>Sign In</h1>
-        <p>Welcome back! Please sign in to continue</p>
-        <div>
-          <User />
-          <input type="text" placeholder="Full Name" required />
-        </div>
+      <form className="relative bg-white p-10 rounded-xl text-slate-500">
+        <h1 className="text-center text-2xl text-neutral-700 font-medium">
+          {mode.title}
+        </h1>
+        <p className="text-sm text-center">{mode.text}</p>
+        {inputs.map((input) => (
+          <div
+            key={input.id}
+            className={
+              "border border-[#4040408a] px-2 py-2 flex items-center rounded-full mt-4 " +
+              (input.hidden ? "hidden" : "")
+            }
+          >
+            {input.icon}
+            <input
+              type={input.type}
+              placeholder={input.placeholder}
+              required={input.required}
+              className="outline-none text-sm pl-2"
+            />
+          </div>
+        ))}
+        <p className="text-sm text-blue-600 my-4 cursor-pointer">
+          Forgot Password?
+        </p>
+        <button
+          className="bg-blue-600 w-full text-white py-2 rounded-full"
+          onClick={handleModeChange}
+        >
+          {mode.title}
+        </button>
+        {mode.title === "Sign Up" && (
+          <p className="text-sm text-center mt-4">
+            Already have an account?{" "}
+            <span
+              className="text-blue-600 cursor-pointer"
+              onClick={handleModeChange}
+            >
+              Sign In
+            </span>
+          </p>
+        )}
+        {mode.title === "Sign In" && (
+          <p className="text-sm text-center mt-4">
+            Don't have an account?{" "}
+            <span
+              className="text-blue-600 cursor-pointer"
+              onClick={handleModeChange}
+            >
+              Sign Up
+            </span>
+          </p>
+        )}
+        <X
+          onClick={setIsLoggedIn.bind(null, false)}
+          className="absolute top-5 right-5 cursor-pointer"
+        />
       </form>
     </div>
   );

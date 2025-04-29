@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 export default function Navbar() {
   const navigate = useNavigate();
-  const { user } = useContext(AppContext);
+  const { user, setIsLoggedIn } = useContext(AppContext);
   return (
     <div className="flex items-center justify-between py-4">
       <Link to="/">
@@ -50,7 +50,10 @@ export default function Navbar() {
             <p onClick={() => navigate("/pricing")} className="cursor-pointer">
               Pricing
             </p>
-            <button className="bg-zinc-800 text-white px-7 py-2 sm:px-10 text-sm rounded-full">
+            <button
+              onClick={setIsLoggedIn.bind(null, true)}
+              className="bg-zinc-800 text-white px-7 py-2 sm:px-10 text-sm rounded-full"
+            >
               Login
             </button>
           </div>

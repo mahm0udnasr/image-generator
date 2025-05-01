@@ -1,16 +1,19 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
-
+import connectDB from "./config/db.js";
 const PORT = process.env.PORT || 5000;
 const app = express();
 
 // Middleware
+app.use(express.json());
 app.use(cors());
+// Connect to MongoDB
+await connectDB();
 
-// Test Route
+// Routes
 app.get("/", (req, res) => {
-  res.send("API Working!");
+  res.send("Hello World!");
 });
 
 app.listen(PORT, () => {

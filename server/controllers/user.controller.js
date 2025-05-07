@@ -153,16 +153,23 @@ const logoutUser = async (req, res) => {
 */
 const userCredits = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId } = req;
     const user = await User.findById(userId);
     if (!user) {
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
     }
+    return res.status(200).json({
+      success: true,
+      credits: user.credits,
+      user: {
+        name: user.name,
+      },
+    });
   } catch (error) {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
-export { registerUser, loginUser, logoutUser };
+export { registerUser, loginUser, logoutUser, userCredits };

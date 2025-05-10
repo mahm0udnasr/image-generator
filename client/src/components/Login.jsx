@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from "react";
+import axios from "axios";
 import { motion } from "framer-motion";
 import { AppContext } from "../context/AppContext";
 import { User, Mail, Lock, X } from "lucide-react";
 export default function Login() {
   // stop scrolling when the form is open
-  const { setIsLoggedIn } = useContext(AppContext);
+  const { setIsLoggedIn, apiUrl } = useContext(AppContext);
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -15,6 +16,11 @@ export default function Login() {
     title: "Sign In",
     text: "Welcome back! Please sign in to continue",
   });
+  const [data, setData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
   const inputs = [
     {
       id: 1,
@@ -23,6 +29,9 @@ export default function Login() {
       required: true,
       icon: <User size={20} color="#4040408a" />,
       hidden: mode.title === "Sign In",
+      disabled: mode.title === "Sign In",
+      value: data.name,
+      onChange: (e) => setData({ ...data, name: e.target.value }),
     },
     {
       id: 2,
@@ -30,6 +39,9 @@ export default function Login() {
       placeholder: "Email Address",
       required: true,
       icon: <Mail size={20} color="#4040408a" />,
+      hidden: false,
+      value: data.email,
+      onChange: (e) => setData({ ...data, email: e.target.value }),
     },
     {
       id: 3,
@@ -37,6 +49,9 @@ export default function Login() {
       placeholder: "Password",
       required: true,
       icon: <Lock size={20} color="#4040408a" />,
+      hidden: false,
+      value: data.password,
+      onChange: (e) => setData({ ...data, password: e.target.value }),
     },
   ];
   const handleModeChange = () => {
@@ -51,10 +66,36 @@ export default function Login() {
         text: "Welcome back! Please sign in to continue",
       });
     }
+    setData({
+      name: "",
+      email: "",
+      password: "",
+    });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (mode.title === "Sign In") {
+        const { data } = await axios.post(`${apiUrl}/users/login`, {
+          email: data.email,
+          password: data.password,
+        }); 
+      } else {
+        await axios.post(`${apiUrl}/users/register`, {
+          name: data.name,
+          email: data.email,
+          password: data.password,
+        });
+        console.log("Sign Up", data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="fixed top-0 left-0 right-0  bottom-0 z-10 backdrop-blur-sm bg-black/30 flex justify-center items-center">
       <motion.form
+        onSubmit={handleSubmit}
         className="relative bg-white p-10 rounded-xl text-slate-500"
         initial={{ opacity: 0.2, y: 50 }}
         transition={{ duration: 0.3 }}
@@ -79,16 +120,16 @@ export default function Login() {
               placeholder={input.placeholder}
               required={input.required}
               className="outline-none text-sm pl-2"
+              disabled={input.disabled}
+              value={input.value}
+              onChange={input.onChange}
             />
           </div>
         ))}
         <p className="text-sm text-blue-600 my-4 cursor-pointer">
           Forgot Password?
         </p>
-        <button
-          className="bg-blue-600 w-full text-white py-2 rounded-full"
-          onClick={handleModeChange}
-        >
+        <button className="bg-blue-600 w-full text-white py-2 rounded-full">
           {mode.title}
         </button>
         {mode.title === "Sign Up" && (

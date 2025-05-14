@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 export default function Navbar() {
   const navigate = useNavigate();
-  const { user, setIsLoggedIn } = useContext(AppContext);
+  const { user, setIsLoggedIn, logout, credit } = useContext(AppContext);
   return (
     <div className="flex items-center justify-between py-4">
       <Link to="/">
@@ -28,10 +28,10 @@ export default function Navbar() {
                 className="w-5"
               />
               <p className="text-xs sm:text-sm font-medium text-gray-600">
-                Credits left: 50
+                Credits left: {credit}
               </p>
             </button>
-            <p className="text-gray-600 max-sm:hidden pl-4">Hi, MahmoudNasr</p>
+            <p className="text-gray-600 max-sm:hidden pl-4">Hi, {user.name}</p>
             <div className="relative group">
               <img
                 src={assets.profile_icon}
@@ -40,7 +40,12 @@ export default function Navbar() {
               />
               <div className="absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-12">
                 <ul className="m-0 p-2 bg-white rounded-md border border-gray-200 drop-shadow-xs text-sm">
-                  <li className="py-1 px-2 cursor-pointer pr-10">Logout</li>
+                  <li
+                    className="py-1 px-2 cursor-pointer pr-10"
+                    onClick={logout}
+                  >
+                    Logout
+                  </li>
                 </ul>
               </div>
             </div>

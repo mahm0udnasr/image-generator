@@ -1,11 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 import { AppContext } from "../context/AppContext";
 import { User, Mail, Lock, X } from "lucide-react";
+
 export default function Login() {
   // stop scrolling when the form is open
-  const { setIsLoggedIn, apiUrl } = useContext(AppContext);
+  const { setIsLoggedIn, apiUrl, setToken, setUser } = useContext(AppContext);
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -76,20 +78,45 @@ export default function Login() {
     e.preventDefault();
     try {
       if (mode.title === "Sign In") {
-        const { data } = await axios.post(`${apiUrl}/users/login`, {
+        const response = await axios.post(`${apiUrl}/users/login`, {
           email: data.email,
           password: data.password,
-        }); 
+        });
+        if (response.data.success) {
+          setToken(response.data.token);
+          setUser(response.data.user);
+          localStorage.setItem("token", response.data.token);
+          setIsLoggedIn(false);
+        } else {
+          toast.error(response.data.message);
+          setData({
+            name: "",
+            email: "",
+            password: "",
+          });
+        }
       } else {
-        await axios.post(`${apiUrl}/users/register`, {
+        const response = await axios.post(`${apiUrl}/users/register`, {
           name: data.name,
           email: data.email,
           password: data.password,
         });
-        console.log("Sign Up", data);
+        if (response.data.success) {
+          setToken(response.data.token);
+          setUser(response.data.user);
+          localStorage.setItem("token", response.data.token);
+          setIsLoggedIn(false);
+        } else {
+          toast.error(response.data.message);
+          setData({
+            name: "",
+            email: "",
+            password: "",
+          });
+        }
       }
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
     }
   };
   return (

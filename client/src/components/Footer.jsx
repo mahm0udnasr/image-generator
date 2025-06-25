@@ -3,9 +3,15 @@ import { assets } from "../assets/assets";
 import { Github, Linkedin, Facebook } from "lucide-react";
 export default function Footer() {
   const socialIcons = [
-    { icon: <Github size={20} />, link: "#" },
-    { icon: <Linkedin size={20} />, link: "#" },
-    { icon: <Facebook size={20} />, link: "#" },
+    { icon: <Github size={20} />, link: "https://github.com/mahm0udnasr" },
+    {
+      icon: <Linkedin size={20} />,
+      link: "https://www.linkedin.com/in/mahm0udnasr",
+    },
+    {
+      icon: <Facebook size={20} />,
+      link: "https://www.facebook.com/mhm0udnasr",
+    },
   ];
   return (
     <div className="flex items-center justify-between gap-4 py-3 mt-20">

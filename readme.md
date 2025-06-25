@@ -11,7 +11,7 @@ Generate images with AI and download them securely.
 ## Installation
 
 ```bash
-git clone https://github.com/yourusername/imagify.git
+git clone https://github.com/mahm0udnasr/image-generator.git
 cd imagify
 npm install
 ```

@@ -31,15 +31,18 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const generateImage = async (promt) => {
+  const generateImage = async (prompt) => {
     try {
+      console.log(token);
       const { data } = await axios.post(
         `${apiUrl}/images/generate`,
         {
-          promt,
+          prompt,
         },
         {
-          headers: { token },
+          headers: {
+            authorization: token,
+          },
         }
       );
       if (data.success) {

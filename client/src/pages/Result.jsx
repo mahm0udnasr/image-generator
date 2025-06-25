@@ -2,22 +2,31 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { assets } from "../assets/assets";
 import { ImageDown, Loader2 } from "lucide-react";
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext";
 
 export default function Result() {
   const [image, setImage] = useState(assets.sample_img_1);
   const [imageLoading, setImageLoading] = useState(false);
   const [imageGenerated, setImageGenerated] = useState(false);
   const [prompt, setPrompt] = useState("");
+  const { generateImage } = useContext(AppContext);
 
-  const handleGenerate = (e) => {
+  const handleGenerate = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
     setImageLoading(true);
-    setTimeout(() => {
+    const image = await generateImage(prompt);
+    if (image) {
       setImageLoading(false);
       setImageGenerated(true);
-      setImage(assets.sample_img_2); // Simulate image generation
-    }, 3000);
+      setImage(image);
+    } else {
+      setImageLoading(false);
+      setImageGenerated(false);
+      setImage(assets.sample_img_1); // Reset to initial image if generation fails
+    }
+    setImageLoading(false);
   };
 
   const handleGenerateAnother = () => {

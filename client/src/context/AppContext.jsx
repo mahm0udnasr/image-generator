@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { createContext } from "react";
 import { toast } from "react-toastify";
@@ -11,6 +12,7 @@ const AppProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [credit, setCredit] = useState(false);
   const apiUrl = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate();
   const loadCreditData = async () => {
     try {
       const { data } = await axios.get(`${apiUrl}/users/credits`, {
@@ -23,6 +25,32 @@ const AppProvider = ({ children }) => {
         setUser(data.user);
       } else {
         toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const generateImage = async (promt) => {
+    try {
+      const { data } = await axios.post(
+        `${apiUrl}/images/generate`,
+        {
+          promt,
+        },
+        {
+          headers: { token },
+        }
+      );
+      if (data.success) {
+        loadCreditData();
+        return data.imageUrl;
+      } else {
+        toast.error(data.message);
+        loadCreditData();
+        if (data.creditBalance == 0) {
+          navigate("/pricing");
+        }
       }
     } catch (error) {
       toast.error(error.message);
@@ -54,6 +82,7 @@ const AppProvider = ({ children }) => {
     setCredit,
     logout,
     loadCreditData,
+    generateImage,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
